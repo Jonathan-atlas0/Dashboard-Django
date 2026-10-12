@@ -1,149 +1,46 @@
-# 🔐 - SecureDash
+# SecureDash — Web Security Dashboard
 
-Sistema de segurança web desenvolvido como projeto acadêmico para a Fábrica de Software 2026.1.
+#### Video Demo: PENDING
 
-## 📋 Funcionalidades
+#### Description:
 
-- 🕵️ **IP Finder** — Identifica a localização e informações de um endereço IPv4 usando a API IPInfo
-- 🎣 **Link Checker** — Verifica se uma URL é maliciosa ou phishing usando a API VirusTotal
-- 📋 **Histórico de Verificações** — Armazena todas as consultas realizadas com opção de editar e limpar
-- 🗄️ **Banco de dados relacional** — Duas entidades relacionadas separando consultas de URL e IP
+SecureDash is a web application developed as an academic project for Fábrica de Software 2026.1. Its main purpose is to provide a centralized interface for performing basic security-related checks on IP addresses and URLs. The application integrates external APIs to retrieve information about IP addresses and analyze URLs for potential malicious activity.
 
-## 🛠️ Tecnologias
+The project was developed using Python and Django, with HTML and CSS for the user interface, PostgreSQL for relational data storage, and Docker for containerization. The application demonstrates the integration of external services, server-side request processing, database operations, and the organization of a web application using the Django framework.
 
-- Python 3.11
-- Django 6.0.3
-- HTML e CSS
-- PostgreSQL
-- Docker
-- API VirusTotal v3
-- API IPInfo
+## Features
 
-## 📸 Screenshots
+### 1. IP Finder
 
-### Página Principal
-![Página Principal](docs/home.png)
+The IP Finder allows users to submit an IPv4 address and retrieve information about it through the IPInfo API. This feature helps users inspect information associated with an IP address, such as its approximate geographic location and other details returned by the API.
 
-### Link Checker
-![Link Checker](docs/Historico.png)
+The application sends the submitted address to the external service and presents the returned information through its interface. The accuracy and availability of the results depend on the external API.
 
-### IP Finder
-![IP Finder](docs/Ip.png)
+### 2. Link Checker
 
+The Link Checker allows users to submit a URL for security analysis using the VirusTotal API v3. The application communicates with the service to obtain information about the submitted URL and its potential association with malicious content or phishing.
 
+This feature demonstrates how an application can integrate an external security service to support URL analysis. The results depend on the information available through VirusTotal and should not be interpreted as an absolute guarantee that a URL is safe or malicious.
 
-## ⚙️ Como instalar e rodar
+### 3. Verification History
 
-**1. Clone o repositório**
-```bash
-git clone https://github.com/Jonathan-atlas0/wsBackend-Fabrica26.1.git
-cd wsBackend-Fabrica26.1
-```
+SecureDash stores records of verification requests in its database. Users can review previous checks, edit records, and clear the history through the application's interface.
 
-**2. Crie e ative o ambiente virtual**
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
+Keeping a history allows users to revisit previous queries instead of relying exclusively on the results displayed immediately after each request.
 
-**3. Instale as dependências**
-```bash
-pip install -r requirements.txt
-```
+### 4. Relational Database
 
-**4. Configure as chaves de API**
- ⚠️Não precisa, a chave já está no codigo, Se quiser usar sua propia chave:
+The application uses PostgreSQL to persist verification data. Its data model separates URL-related and IP-related queries into two related entities, helping organize records according to the type of verification performed.
 
-No arquivo `virustotal.py` substitua pela sua chave do VirusTotal:
-```python
-VIRUSTOTAL_API_KEY = 'sua_chave_aqui'
-```
+Django's database functionality and migrations are used to manage the application's database structure.
 
-No arquivo `ipinfo.py` substitua pelo seu token do IPInfo:
-```python
-IPINFOCHAVE = 'seu_token_aqui'
-```
+### 5. Containerization
 
-**5. Configure o banco de dados**
+Docker and Docker Compose are provided to facilitate application setup and execution. Containerization helps make the development environment more consistent and reduces differences between machines with different local configurations.
 
-No arquivo `settings.py` configure o banco de dados:
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'securedash',
-        'USER': 'postgres',
-        'PASSWORD': 'sua_senha',
-        'HOST': 'localhost',  # ou 'db' se rodar com Docker Compose
-        'PORT': '5432',
-    }
-}
-```
+## Technologies Used
 
-> ⚠️ Crie o banco `securedash` no PostgreSQL antes de rodar as migrations!
-
-**6. Rode as migrations**
-```bash
-python manage.py migrate
-```
-
-**7. Inicie o servidor**
-```bash
-python manage.py runserver
-
-Acesse em: http://127.0.0.1:8000
-```
-
-## 🐳 Rodando com Docker**
-
-**Opção 1 — Docker Compose (recomendado)**
-```bash
-docker-compose up
-```
-Acesse em: http://localhost:8000
-
-**Opção 2 — Docker simples**
-```bash
-docker build -t securedash .
-docker run -p 8000:8000 securedash
-```
-
-## 🧪 IPs e URLs para teste
-
-| Tipo | Valor | Descrição |
-|------|-------|-----------|
-| IP | `1.178.29.0` | Mexico |
-| IP | `1.1.1.1` | Cloudflare |
-| IP | `177.66.0.1` | TIM Nordeste |
-| URL | `https://www.google.com` | URL limpa |
-| URL | `http://testsafebrowsing.appspot.com/s/phishing.html` | URL de phishing (teste) |
-| URL | `http://testsafebrowsing.appspot.com/s/malware.html` | URL de malware (teste) |
-
-## 🔑 APIs utilizadas
-
-| API | Uso | Link |
-|-----|-----|------|
-| VirusTotal | Verificação de URLs maliciosas | [virustotal.com](https://www.virustotal.com) |
-| IPInfo | Localização de endereços IP | [ipinfo.io](https://ipinfo.io) |
-
-## 🔗 Endpoints
-
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET/POST | `/` | Página principal e verificação de URL via VirusTotal |
-| POST | `/ip/` | Consulta de localização de IP via IPInfo |
-| POST | `/limpar/` | Limpa todo o histórico de verificações |
-| GET/POST | `/editar/<id>/` | Edita um registro do histórico |
-
-## 🤖 Uso de Inteligência Artificial
-
-A IA foi utilizada para:
-
-- Sugerir boas práticas de organização de código Django
-- Ajudar na configuração do Docker e Docker Compose
-- Revisar e melhorar o CSS e o HTML
-- Escrever e melhorar a documentação do projeto
-
-## 👨‍💻 Autor
-
-Desenvolvido por **Jonathan Santos** — Fábrica de Software 2026.1
+- **Python 3.11:** Main programming language.
+- **Django 6.0.3:** Web framework used to handle requests, application logic, routing, and database integration.
+- **HTML and CSS:** User interface structure and styling.
+- **PostgreSQL:** Rel
